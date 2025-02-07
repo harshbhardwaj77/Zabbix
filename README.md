@@ -94,7 +94,7 @@ EXIT;
 Edit the Zabbix Server configuration file:
 ```bash
 sudo vim /etc/zabbix/zabbix_server.conf
-
+```
 Find the line:
 ```bash
 # DBPassword=
