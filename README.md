@@ -25,4 +25,12 @@ Run the following commands to install Apache:
 sudo apt update
 sudo apt install -y apache2
 sudo systemctl start apache2
-sudo systemctl enable apache2    
+sudo systemctl enable apache2
+
+### **2️⃣ Install PHP**
+Install PHP along with required modules for Zabbix:
+```bash
+sudo apt install -y php php-cli php-mbstring php-bcmath php-xml php-mysql libapache2-mod-php
+sudo systemctl restart apache2
+
+
