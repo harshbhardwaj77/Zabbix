@@ -9,7 +9,7 @@ When monitoring multiple VMs (50+ or more) in **Zabbix**, manually setting up tr
 To monitor Linux VMs, we use the **"Linux by Zabbix agent"** template, which replaces the older **"Template OS Linux"** in newer Zabbix versions.
 
 ### Steps to Assign the Template to All VMs
-1. **Go to** `Configuration → Hosts`
+1. **Go to** `Data collection → Hosts`
 2. **Click on a monitored VM**
 3. **Navigate to the "Templates" tab**
 4. **Click "Select"**, then choose **"Linux by Zabbix agent"**
@@ -24,7 +24,7 @@ To monitor Linux VMs, we use the **"Linux by Zabbix agent"** template, which rep
 Once the template is applied to all VMs, we create **triggers** inside the template. This ensures that **all VMs using the template will inherit the same trigger conditions automatically**.
 
 ### **Steps to Create Triggers for High CPU Usage**
-1. **Go to** `Configuration → Templates`
+1. **Go to** `Data collection → Templates`
 2. **Find and select** "Linux by Zabbix agent"
 3. **Click on "Triggers" → "Create trigger"**
 4. **Enter the Trigger Details:**
@@ -44,7 +44,7 @@ Once the template is applied to all VMs, we create **triggers** inside the templ
 ---
 
 ### **Steps to Create Triggers for High Memory Usage**
-1. **Go to** `Configuration → Templates`
+1. **Go to** `Data collection → Templates`
 2. **Find and select** "Linux by Zabbix agent"
 3. **Click on "Triggers" → "Create trigger"**
 4. **Enter the Trigger Details:**
