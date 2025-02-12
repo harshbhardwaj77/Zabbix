@@ -141,9 +141,9 @@ zabbix_sender -z 65.2.181.194 -s "$(hostname)" -k system.cpu.load[percpu,avg1] -
 ✅ Expected Output: sent: 1; failed: 0;
 
 ## ✅ Final Summary
-✔ Zabbix Agent Installed & Configured Automatically on GCP
-✔ Auto-Registration Enabled in Zabbix Server
-✔ Agent Restarts & Monitored VM Auto-Added to Zabbix
+✔ Zabbix Agent Installed & Configured Automatically on GCP /
+✔ Auto-Registration Enabled in Zabbix Server /
+✔ Agent Restarts & Monitored VM Auto-Added to Zabbix /
 ✔ Checked Logs & Troubleshooting Steps for Issues
 
 🚀 Now, every new GCP VM will auto-register and start monitoring itself in Zabbix automatically! 🎉
