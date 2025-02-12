@@ -63,3 +63,87 @@ else
 fi
 
 echo "🎉 Zabbix Agent Setup Completed Successfully on $(hostname)!" | tee -a $LOG_FILE
+
+```
+
+## 2️⃣ Using the Startup Script in GCP
+### Method 1: Run Manually on a GCP VM
+Save the script as zabbix-agent-setup.sh
+Run the following commands:
+```bash
+chmod +x zabbix-agent-setup.sh
+sudo ./zabbix-agent-setup.sh
+```
+### Method 2: Use as a Startup Script When Launching a VM
+Go to Google Cloud Console → Compute Engine → VM Instances
+Click "Create Instance"
+Scroll down to "Advanced options" → "Automation" → "Startup script"
+Paste the entire script into the box
+Click "Create"
+🚀 The VM will install and configure the Zabbix Agent automatically on first boot!
+
+## 3️⃣ Configure Auto-Registration in Zabbix Server
+### Step 1: Enable Auto-Registration in Zabbix UI
+Log in to Zabbix Web UI:
+```bash
+http://<ZABBIX_SERVER_IP>/zabbix
+```
+Navigate to:
+```bash
+Alerts → Actions → Auto-Registration
+```
+Click "Create Action".
+### Step 2: Set Auto-Registration Conditions
+Action Name: Auto Register GCP VMs
+Condition Type: Host metadata
+Operator: Contains
+Value: cloudgo
+(This must match ZABBIX_METADATA in the script)
+### Step 3: Define Auto-Registration Actions
+Under the Operations tab:
+
+Click "New" to add an operation.
+Operation Type: Add Host
+Assign to a Host Group:
+Example: GCP Instances (Create a new group if needed)
+Assign Templates:
+Select Template OS Linux (or any other relevant template)
+✅ Click "Update" to Save Changes!
+
+## 4️⃣ Verify Auto-Registration
+### Step 1: Wait for a Few Minutes
+Auto-registration may take some time depending on the agent's update interval.
+### Step 2: Check in Zabbix Web UI
+Go to Data collection → Hosts.
+Look for the newly registered GCP VM.
+Ensure it is in the correct Host Group and has the correct Template.
+If the host does not appear, check the Auto-registration Logs in:
+```bash
+Alerts → Actions → Auto-Registration
+```
+## 5️⃣ Troubleshooting Auto-Registration Issues
+### 1️⃣ Check Zabbix Agent Logs on the Monitored VM
+```bash
+sudo tail -f /var/log/zabbix/zabbix_agent2.log
+```
+Look for errors like "cannot connect to server".
+Ensure HostMetadata matches exactly with what is set in Zabbix UI.
+### 2️⃣ Check Zabbix Server Logs
+```bash
+sudo tail -f /var/log/zabbix/zabbix_server.log
+```
+Look for auto-registration processing logs.
+### 3️⃣ Test Manual Registration
+Run this on the Monitored VM to check if it can send data to Zabbix:
+```bash
+zabbix_sender -z 65.2.181.194 -s "$(hostname)" -k system.cpu.load[percpu,avg1] -o 0.5
+```
+✅ Expected Output: sent: 1; failed: 0;
+
+## ✅ Final Summary
+✔ Zabbix Agent Installed & Configured Automatically on GCP
+✔ Auto-Registration Enabled in Zabbix Server
+✔ Agent Restarts & Monitored VM Auto-Added to Zabbix
+✔ Checked Logs & Troubleshooting Steps for Issues
+
+🚀 Now, every new GCP VM will auto-register and start monitoring itself in Zabbix automatically! 🎉
