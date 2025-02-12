@@ -86,5 +86,5 @@ Once the template is applied to all VMs, we create **triggers** inside the templ
 
 🚀 Now, Zabbix will **automatically alert you** when CPU or Memory usage is high for any VM without needing manual configuration! 🎉
 
-Let me know if you need further customizations! 😊
+
 
