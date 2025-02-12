@@ -1,0 +1,90 @@
+# Configuring High CPU & Memory Usage Triggers in Zabbix (GCP VMs)
+
+## Overview
+When monitoring multiple VMs (50+ or more) in **Zabbix**, manually setting up triggers for each VM is inefficient. Instead, we use **templates** to apply triggers automatically across all monitored VMs. This guide explains how to configure **high CPU & memory usage triggers** using the **"Linux by Zabbix agent"** template.
+
+---
+
+## 1️⃣ Applying the "Linux by Zabbix agent" Template to All VMs
+To monitor Linux VMs, we use the **"Linux by Zabbix agent"** template, which replaces the older **"Template OS Linux"** in newer Zabbix versions.
+
+### Steps to Assign the Template to All VMs
+1. **Go to** `Configuration → Hosts`
+2. **Click on a monitored VM**
+3. **Navigate to the "Templates" tab**
+4. **Click "Select"**, then choose **"Linux by Zabbix agent"**
+5. **Click "Update"**
+6. Repeat for all VMs or use the **bulk update option** to apply to multiple VMs at once.
+
+✅ Now, all assigned VMs will start collecting **CPU, Memory, and Disk usage metrics** automatically!
+
+---
+
+## 2️⃣ Creating Triggers for High CPU & Memory Usage
+Once the template is applied to all VMs, we create **triggers** inside the template. This ensures that **all VMs using the template will inherit the same trigger conditions automatically**.
+
+### **Steps to Create Triggers for High CPU Usage**
+1. **Go to** `Configuration → Templates`
+2. **Find and select** "Linux by Zabbix agent"
+3. **Click on "Triggers" → "Create trigger"**
+4. **Enter the Trigger Details:**
+   - **Name:** `High CPU Usage Alert`
+   - **Severity:** `High`
+   - **Expression:**
+     ```ini
+     last(/Linux by Zabbix agent/system.cpu.util,#2)>80
+     ```
+     **Explanation:**
+     - This checks if the **CPU usage of the last two collected values** exceeds **80%**.
+     - If the condition is met, an **alert is triggered**.
+5. **Click "Add" → Apply**
+
+✅ Now, all VMs using this template will automatically trigger an alert when CPU usage goes above **80%**.
+
+---
+
+### **Steps to Create Triggers for High Memory Usage**
+1. **Go to** `Configuration → Templates`
+2. **Find and select** "Linux by Zabbix agent"
+3. **Click on "Triggers" → "Create trigger"**
+4. **Enter the Trigger Details:**
+   - **Name:** `High Memory Usage Alert`
+   - **Severity:** `High`
+   - **Expression:**
+     ```ini
+     last(/Linux by Zabbix agent/vm.memory.utilization,#2)>90
+     ```
+     **Explanation:**
+     - This checks if **RAM utilization of the last two collected values** exceeds **90%**.
+     - If the condition is met, an **alert is triggered**.
+5. **Click "Add" → Apply**
+
+✅ Now, memory alerts will automatically trigger when usage goes above **90%**.
+
+---
+
+## 3️⃣ Why Use Templates for Triggers?
+| **Method** | **Scalability** | **Ease of Management** | **Best For** |
+|------------|--------------|-----------------|------------|
+| **Manual Trigger per VM** | ❌ Not Scalable | ❌ Hard to manage | < 10 VMs |
+| **Template-Based Triggers** ✅ | ✅ Highly Scalable | ✅ Auto-applies to all VMs | 50+ VMs |
+| **Host Groups & Custom Templates** | ✅ Super Flexible | ✅ Different triggers per group | 100+ VMs |
+
+🚀 Using **templates** ensures that **triggers automatically apply to all VMs** without manual configuration.
+
+---
+
+## ✅ Final Summary
+✔ **Use "Linux by Zabbix agent" as the template** for Linux VMs.
+✔ **Apply the template to all monitored VMs** for automated monitoring.
+✔ **Define triggers inside the template**, so they apply to **all VMs automatically**.
+✔ **Set up CPU & memory triggers** using:
+   ```ini
+   last(/Linux by Zabbix agent/system.cpu.util,#2)>80  # CPU Trigger
+   last(/Linux by Zabbix agent/vm.memory.utilization,#2)>90  # Memory Trigger
+   ```
+
+🚀 Now, Zabbix will **automatically alert you** when CPU or Memory usage is high for any VM without needing manual configuration! 🎉
+
+Let me know if you need further customizations! 😊
+
