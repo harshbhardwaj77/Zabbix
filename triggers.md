@@ -63,7 +63,37 @@ Once the template is applied to all VMs, we create **triggers** inside the templ
 
 ---
 
-## 3️⃣ Why Use Templates for Triggers?
+## 3️⃣ Setting Up Alerts Based on These Triggers
+Once the triggers are set up, you need to configure **alert notifications** so that the right people are notified when CPU or memory usage is high.
+
+### **Steps to Configure Alerting (Email Notification Example)**
+1. **Go to Zabbix Web UI** → `Alerts → Actions`
+2. Click **"Create Action"**
+3. **Enter Action Details:**
+   - **Name:** `Notify Admins for High CPU/Memory`
+   - **Event Source:** `Trigger`
+   - **Condition:**  
+     - **Trigger severity** → `>= High`
+     - **Host group** → `GCP Instances`
+4. **Under Operations Tab:**
+   - Click **"New"** to add an operation.
+   - **Operation Type:** `Send Message`
+   - **Send To:** `Zabbix Administrators`
+   - **Use Media Type:** `Email` (or configure Slack, Telegram, etc.)
+   - **Message:**  
+     ```ini
+     High CPU/Memory Alert on {HOST.NAME}
+     Issue: {TRIGGER.NAME}
+     Severity: {TRIGGER.SEVERITY}
+     Current Value: {ITEM.VALUE1}%
+     ```
+5. **Click "Add" → "Update"**
+
+✅ Now, you will receive **email alerts** whenever CPU or Memory usage is high!
+
+---
+
+## 4️⃣ Why Use Templates for Triggers?
 | **Method** | **Scalability** | **Ease of Management** | **Best For** |
 |------------|--------------|-----------------|------------|
 | **Manual Trigger per VM** | ❌ Not Scalable | ❌ Hard to manage | < 10 VMs |
@@ -83,8 +113,9 @@ Once the template is applied to all VMs, we create **triggers** inside the templ
    last(/Linux by Zabbix agent/system.cpu.util,#2)>80  # CPU Trigger
    last(/Linux by Zabbix agent/vm.memory.utilization,#2)>90  # Memory Trigger
    ```
+✔ **Configure Alerts** under `Alerts → Actions` to send notifications for high resource usage.
 
 🚀 Now, Zabbix will **automatically alert you** when CPU or Memory usage is high for any VM without needing manual configuration! 🎉
 
-
+Let me know if you need further customizations! 😊
 
