@@ -114,7 +114,7 @@ Select Template OS Linux (or any other relevant template)
 ### Step 1: Wait for a Few Minutes
 Auto-registration may take some time depending on the agent's update interval.
 ### Step 2: Check in Zabbix Web UI
-Go to Data collection → Hosts.
+Go to **Data collection → Hosts**.
 Look for the newly registered GCP VM.
 Ensure it is in the correct Host Group and has the correct Template.
 If the host does not appear, check the Auto-registration Logs in:
