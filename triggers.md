@@ -1,7 +1,7 @@
 # Configuring High CPU & Memory Usage Triggers in Zabbix (GCP VMs)
 
 ## Overview
-When monitoring multiple VMs (50+ or more) in **Zabbix**, manually setting up triggers for each VM is inefficient. Instead, we use **templates** to apply triggers automatically across all monitored VMs. This guide explains how to configure **high CPU & memory usage triggers** using the **"Linux by Zabbix agent"** template.
+When monitoring multiple VMs (50+ or more) in **Zabbix**, manually setting up triggers for each VM is inefficient. Instead, we use **templates** to apply triggers automatically across all monitored VMs. This guide explains how to configure **high CPU & memory usage triggers** using the **"Linux by Zabbix agent"** template and how to set up **email alerts**.
 
 ---
 
@@ -93,14 +93,40 @@ Once the triggers are set up, you need to configure **alert notifications** so t
 
 ---
 
-## 4️⃣ Why Use Templates for Triggers?
-| **Method** | **Scalability** | **Ease of Management** | **Best For** |
-|------------|--------------|-----------------|------------|
-| **Manual Trigger per VM** | ❌ Not Scalable | ❌ Hard to manage | < 10 VMs |
-| **Template-Based Triggers** ✅ | ✅ Highly Scalable | ✅ Auto-applies to all VMs | 50+ VMs |
-| **Host Groups & Custom Templates** | ✅ Super Flexible | ✅ Different triggers per group | 100+ VMs |
+## 4️⃣ Setting Up Media Type (Email) for Notifications
+Before Zabbix can send email alerts, you need to **configure an email media type and assign it to users**.
 
-🚀 Using **templates** ensures that **triggers automatically apply to all VMs** without manual configuration.
+### **Steps to Configure Email Media Type**
+1. **Go to** `Alerts → Media types`
+2. Click **"Create Media Type"**
+3. **Set the following details:**
+   - **Name:** `Email`
+   - **Type:** `Email`
+   - **SMTP Server:** `smtp.gmail.com`
+   - **SMTP Port:** `587` (TLS) or `465` (SSL)
+   - **SMTP Authentication:** Enabled
+   - **SMTP Username:** `your-email@gmail.com`
+   - **SMTP Password:** (Use **Google App Password**, not your normal password)
+   - **From email:** `your-email@gmail.com`
+   - **Connection Security:** `STARTTLS` (for `587`) or `SSL/TLS` (for `465`)
+4. **Click "Update"**
+
+✅ Now, Zabbix can send emails using this media type.
+
+---
+
+### **Assign Email Media to Users**
+1. **Go to** `Administration → Users`
+2. **Select the user receiving alerts (e.g., Admin)**
+3. **Go to "Media" tab → Click "Add"**
+4. **Enter the details:**
+   - **Type:** `Email`
+   - **Send to:** `your-email@gmail.com`
+   - **Severity:** Check all (`Not classified, Information, Warning, High, Disaster`)
+   - **Status:** Enabled
+5. **Click "Update"**
+
+✅ Now, the user can receive email alerts!
 
 ---
 
@@ -114,8 +140,8 @@ Once the triggers are set up, you need to configure **alert notifications** so t
    last(/Linux by Zabbix agent/vm.memory.utilization,#2)>90  # Memory Trigger
    ```
 ✔ **Configure Alerts** under `Alerts → Actions` to send notifications for high resource usage.
+✔ **Set up Media Type (Email)** under `Alerts → Media types` and **assign it to users**.
 
 🚀 Now, Zabbix will **automatically alert you** when CPU or Memory usage is high for any VM without needing manual configuration! 🎉
 
-Let me know if you need further customizations! 😊
 
